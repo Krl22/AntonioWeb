@@ -79,7 +79,7 @@ const Environment = () => {
       className="min-h-screen bg-gradient-to-r from-green-50 to-green-100 p-6 pt-[92px] pb-[112px]"
       style={{ overflow: "hidden" }}
     >
-      <APIProvider apiKey="AIzaSyBl-Y9xVxjWDlIVQSoNVBT_xeh43JhQlNc">
+      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
         <Map
           style={{ width: "100%", height: "600px" }}
           defaultCenter={{ lat: 42.3601, lng: -71.0589 }}
