@@ -3,12 +3,12 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  server: {
-    https: {
-      key: "./esol-privateKey.key",
-      cert: "./esol.crt",
-    },
-  },
+  // server: {
+  //   https: {
+  //     key: "./esol-privateKey.key",
+  //     cert: "./esol.crt",
+  //   },
+  // },
   plugins: [
     react(),
     VitePWA({
