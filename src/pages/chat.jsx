@@ -97,7 +97,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between pb-[50px] h-screen p-6 bg-gradient-to-r from-purple-400 to-indigo-600">
+    <div className="flex flex-col justify-between pb-[100px] h-screen p-6 bg-gradient-to-r from-purple-400 to-indigo-600">
       <div className="flex-grow p-6 overflow-y-auto bg-white rounded-lg shadow-lg">
         {messages.slice(1).map((msg, index) => (
           <div

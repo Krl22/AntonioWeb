@@ -19,6 +19,13 @@ const More = () => {
         Account
       </NavLink>
       <NavLink
+        to="/avatar"
+        onClick={() => handleTitle("Avatar")} // Actualiza el título al hacer clic
+        className="w-full max-w-md p-4 my-2 text-center bg-white border rounded-md shadow-sm cursor-pointer hover:bg-blue-100 hover:shadow-md"
+      >
+        Avatar
+      </NavLink>
+      <NavLink
         to="/roleplay"
         onClick={() => handleTitle("Role Play")}
         className="w-full max-w-md p-4 my-2 text-center bg-white border rounded-md shadow-sm cursor-pointer hover:bg-blue-100 hover:shadow-md"

@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 
 // Configuraciones de Firebase
 const firebaseConfig = {
@@ -22,3 +23,14 @@ export const googleProvider = new GoogleAuthProvider();
 
 // Exportar instancia de Firestore
 export const db = getFirestore(app);
+
+export const storage = getStorage(app);
+export { ref, listAll, getDownloadURL };
+
+// Function to get assets from a specific folder
+export const getAssets = async (path) => {
+  const listRef = ref(storage, path);
+  const res = await listAll(listRef);
+  const urls = await Promise.all(res.items.map((item) => getDownloadURL(item)));
+  return urls;
+};

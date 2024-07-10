@@ -22,6 +22,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Notification from "./pages/Notifications";
 import RolePlay from "./pages/RolePlay";
+import Avatar from "./pages/Avatar";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/notifications" element={<Notification />} />
             <Route path="/rolePlay" element={<RolePlay />} />
+            <Route path="/avatar" element={<Avatar />} />
           </Routes>
         </div>
         <ConditionalBottomNavBar />
@@ -55,7 +57,7 @@ function App() {
 
 const ConditionalTopNavBar = () => {
   const location = useLocation();
-  const hiddenRoutes = ["/", "/login", "/register", "/chat"];
+  const hiddenRoutes = ["/", "/login", "/register", "/chat", "/avatar"];
   return !hiddenRoutes.includes(location.pathname) ? <TopNavBar /> : null;
 };
 
