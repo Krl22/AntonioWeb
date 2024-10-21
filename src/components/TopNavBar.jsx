@@ -77,6 +77,10 @@ const TopNavBar = () => {
     handleTitle("Account");
     navigate("/account");
   };
+  const handleFriendsClick = () => {
+    handleTitle("Friends");
+    navigate("/Friends");
+  };
 
   return (
     <div className="fixed top-0 z-10 w-full px-4 py-1 shadow-md bg-gradient-to-r from-purple-400 to-indigo-600">
@@ -129,6 +133,14 @@ const TopNavBar = () => {
               role="menu"
               ref={menuRef}
             >
+              <li className="py-2" role="none">
+                <button
+                  className="w-full text-left text-gray-700 hover:text-gray-900 focus:outline-none"
+                  onClick={handleFriendsClick}
+                >
+                  Friends
+                </button>
+              </li>
               <li className="py-2" role="none">
                 <button
                   className="w-full text-left text-gray-700 hover:text-gray-900 focus:outline-none"

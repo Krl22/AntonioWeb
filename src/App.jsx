@@ -13,16 +13,22 @@ import Environment from "./pages/Environment";
 import More from "./pages/More";
 import Chat from "./pages/chat";
 import Account from "./pages/Account";
-import CulturalInsights from "./pages/CulturlInisghts"; // Agregamos CulturalInsights
-import Grammar from "./pages/Grammar"; // Agregamos Grammar
-import Community from "./pages/Community"; // Agregamos Community
-import VocabularyBuilder from "./pages/VocabularyBuilder"; // Agregamos VocabularyBuilder
+import CulturalInsights from "./pages/CulturlInisghts";
+import Grammar from "./pages/Grammar";
+import Community from "./pages/Community";
+import VocabularyBuilder from "./pages/VocabularyBuilder";
 import Landing from "./pages/Landing";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Notification from "./pages/Notifications";
 import RolePlay from "./pages/RolePlay";
 import Avatar from "./pages/Avatar";
+import Game from "./pages/Game";
+import Lobby from "./pages/Lobby";
+import Room from "./pages/Room";
+import Search from "./pages/Search";
+import Friends from "./pages/Friends";
+// import ss1 from "./assets/ss1.png";
 
 function App() {
   return (
@@ -47,6 +53,11 @@ function App() {
             <Route path="/notifications" element={<Notification />} />
             <Route path="/rolePlay" element={<RolePlay />} />
             <Route path="/avatar" element={<Avatar />} />
+            <Route path="/game/:roomId" element={<Game />} />
+            <Route path="/lobby" element={<Lobby />} />
+            <Route path="/room/:roomId" element={<Room />} />
+            <Route path="/search-rooms" element={<Search />} />
+            <Route path="/friends" element={<Friends />} />
           </Routes>
         </div>
         <ConditionalBottomNavBar />
@@ -57,13 +68,20 @@ function App() {
 
 const ConditionalTopNavBar = () => {
   const location = useLocation();
-  const hiddenRoutes = ["/", "/login", "/register", "/chat", "/avatar"];
+  const hiddenRoutes = [
+    "/",
+    "/login",
+    "/register",
+    "/chat",
+    "/avatar",
+    "/game",
+  ];
   return !hiddenRoutes.includes(location.pathname) ? <TopNavBar /> : null;
 };
 
 const ConditionalBottomNavBar = () => {
   const location = useLocation();
-  const hiddenRoutes = ["/", "/login", "/register"];
+  const hiddenRoutes = ["/", "/login", "/register", "/game"];
   return !hiddenRoutes.includes(location.pathname) ? <BottomNavBar /> : null;
 };
 

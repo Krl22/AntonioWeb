@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, googleProvider, db } from "../firebaseconfig";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { createUserDoc } from "./utils/createUserDoc";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -18,16 +19,7 @@ const Register = () => {
         password
       );
       const user = userCredential.user;
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        points: 0,
-        rewards: [],
-        progress: {
-          currentLevel: 1,
-          lessonsCompleted: 0,
-          quizzesCompleted: 0,
-        },
-      });
+      await createUserDoc(user);
       navigate("/home");
     } catch (error) {
       console.error("Error registering:", error);
@@ -38,16 +30,7 @@ const Register = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        points: 0,
-        rewards: [],
-        progress: {
-          currentLevel: 1,
-          lessonsCompleted: 0,
-          quizzesCompleted: 0,
-        },
-      });
+      await createUserDoc(user);
       navigate("/home");
     } catch (error) {
       console.error("Error registering with Google:", error);

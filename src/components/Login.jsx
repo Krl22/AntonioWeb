@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, googleProvider } from "../firebaseconfig";
+import { auth, googleProvider, db } from "../firebaseconfig";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { createUserDoc } from "./utils/createUserDoc";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +18,10 @@ const Login = () => {
         email,
         password
       );
+      const user = userCredential.user;
+
+      await createUserDoc(user);
+
       navigate("/home");
     } catch (error) {
       console.error("Error logging in:", error);
@@ -25,6 +31,12 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const defaultNickname = user.email.split("@")[0];
+
+      await createUserDoc(user, defaultNickname);
+
+      // Redirigir a /home después de iniciar sesión
       navigate("/home");
     } catch (error) {
       console.error("Error logging in with Google:", error);
