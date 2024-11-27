@@ -28,6 +28,7 @@ import Lobby from "./pages/Lobby";
 import Room from "./pages/Room";
 import Search from "./pages/Search";
 import Friends from "./pages/Friends";
+import Scene from "./pages/locations/Restaurant/scene";
 // import ss1 from "./assets/ss1.png";
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
             <Route path="/room/:roomId" element={<Room />} />
             <Route path="/search-rooms" element={<Search />} />
             <Route path="/friends" element={<Friends />} />
+            <Route path="/restaurant" element={<Scene />} />
           </Routes>
         </div>
         <ConditionalBottomNavBar />
