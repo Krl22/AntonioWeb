@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import RestaurantScene from "./Restaurant";
+import EntranceScene from "./Entrance";
 import RestaurantScene02 from "./Restaurant02";
 // import RestaurantScene03 from "./Restaurant03";
 
@@ -15,7 +15,7 @@ const Scene = () => {
   const renderScene = () => {
     switch (currentScene) {
       case "restaurant":
-        return <RestaurantScene changeScene={changeScene} />;
+        return <EntranceScene changeScene={changeScene} />;
       case "Restaurant02":
         return <RestaurantScene02 changeScene={changeScene} />;
       case "Restaurant03":
