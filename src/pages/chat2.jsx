@@ -1,27 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import {
-  FaMoon,
-  FaSun,
-  FaTrash,
-  FaDownload,
-  FaMicrophone,
-  FaMicrophoneSlash,
-} from "react-icons/fa";
+import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
 
-const ChatGPTClone = () => {
-  const [messages, setMessages] = useState([]); // Stores chat history
-  const [input, setInput] = useState(""); // User input
-  const [isLoading, setIsLoading] = useState(false); // Loading state for bot response
-  const [darkMode, setDarkMode] = useState(false); // Dark mode toggle
-  const [isListening, setIsListening] = useState(false); // Voice recognition toggle
-
-  const chatRef = useRef(null); // Reference for auto-scrolling
-  const recognitionRef = useRef(null); // Reference for speech recognition
-
-  useEffect(() => {
-    chatRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+const ChatGPTVoice = () => {
+  const [messages, setMessages] = useState([]);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     if ("webkitSpeechRecognition" in window) {
@@ -35,7 +19,7 @@ const ChatGPTClone = () => {
       recognition.onend = () => setIsListening(false);
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
-        setInput(transcript);
+        handleSendMessage(transcript);
       };
 
       recognitionRef.current = recognition;
@@ -44,21 +28,18 @@ const ChatGPTClone = () => {
     }
   }, []);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (input) => {
     if (!input.trim()) return;
 
     const userMessage = { role: "user", content: input };
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
-    setInput("");
-    setIsLoading(true);
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
         {
           model: "gpt-4",
-          messages: updatedMessages,
+          messages: [...messages, userMessage],
         },
         {
           headers: {
@@ -73,29 +54,15 @@ const ChatGPTClone = () => {
       };
 
       setMessages((prev) => [...prev, botMessage]);
+      speak(botMessage.content);
     } catch (error) {
       console.error("Error fetching response:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") handleSendMessage();
-  };
-
-  const toggleDarkMode = () => setDarkMode(!darkMode);
-
-  const clearChat = () => setMessages([]);
-
-  const downloadChat = () => {
-    const blob = new Blob([JSON.stringify(messages, null, 2)], {
-      type: "application/json",
-    });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "chat_history.json";
-    link.click();
+  const speak = (text) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
   };
 
   const toggleListening = () => {
@@ -109,87 +76,29 @@ const ChatGPTClone = () => {
   };
 
   return (
-    <div
-      className={`min-h-screen flex flex-col ${
-        darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-      }`}
-    >
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 py-2 border-b border-gray-300">
-        <h1 className="text-xl font-bold">ChatGPT Clone</h1>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 bg-gray-200 rounded-full dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-          >
-            {darkMode ? <FaSun /> : <FaMoon />}
-          </button>
-          <button
-            onClick={clearChat}
-            className="p-2 bg-gray-200 rounded-full dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-          >
-            <FaTrash />
-          </button>
-          <button
-            onClick={downloadChat}
-            className="p-2 bg-gray-200 rounded-full dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-          >
-            <FaDownload />
-          </button>
-          <button
-            onClick={toggleListening}
-            className="p-2 bg-gray-200 rounded-full dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-          >
-            {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
-          </button>
-        </div>
-      </header>
-
-      {/* Chat Area */}
-      <main className="flex-grow p-4 overflow-y-auto">
+    <div className="min-h-screen flex flex-col items-center justify-center">
+      <div className="flex items-center gap-4">
+        <button
+          onClick={toggleListening}
+          className="p-4 bg-blue-500 text-white rounded-full"
+        >
+          {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
+        </button>
+      </div>
+      <div className="mt-4 w-full max-w-md">
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex ${
-              msg.role === "user" ? "justify-end" : "justify-start"
-            } mb-4`}
+            className={`p-2 my-2 rounded ${
+              msg.role === "user" ? "bg-blue-200" : "bg-gray-200"
+            }`}
           >
-            <div
-              className={`max-w-xs px-4 py-2 rounded-lg shadow-md ${
-                msg.role === "user"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
-              }`}
-            >
-              {msg.content}
-            </div>
+            {msg.content}
           </div>
         ))}
-        {isLoading && (
-          <div className="text-center text-gray-500">Typing...</div>
-        )}
-        <div ref={chatRef}></div>
-      </main>
-
-      {/* Input Area */}
-      <footer className="flex items-center p-4 border-t border-gray-300">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyPress}
-          placeholder="Type your message..."
-          className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-        />
-        <button
-          onClick={handleSendMessage}
-          className="px-4 py-2 ml-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-        >
-          Send
-        </button>
-      </footer>
+      </div>
     </div>
   );
 };
 
-export default ChatGPTClone;
+export default ChatGPTVoice;
