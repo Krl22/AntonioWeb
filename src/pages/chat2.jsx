@@ -15,10 +15,17 @@ const ChatGPTVoice = () => {
       recognition.continuous = false;
       recognition.interimResults = false;
 
-      recognition.onstart = () => setIsListening(true);
-      recognition.onend = () => setIsListening(false);
+      recognition.onstart = () => {
+        setIsListening(true);
+        console.log("Voice recognition started");
+      };
+      recognition.onend = () => {
+        setIsListening(false);
+        console.log("Voice recognition stopped");
+      };
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
+        console.log("Transcript received:", transcript);
         handleSendMessage(transcript);
       };
 
@@ -69,8 +76,10 @@ const ChatGPTVoice = () => {
     if (recognitionRef.current) {
       if (isListening) {
         recognitionRef.current.stop();
+        console.log("Stopping recognition");
       } else {
         recognitionRef.current.start();
+        console.log("Starting recognition");
       }
     }
   };
