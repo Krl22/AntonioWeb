@@ -12,7 +12,7 @@ const ChatGPTVoice = () => {
       const SpeechRecognition = window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
       recognition.lang = "en-US";
-      recognition.continuous = false;
+      recognition.continuous = true;
       recognition.interimResults = false;
 
       recognition.onstart = () => {
@@ -20,8 +20,13 @@ const ChatGPTVoice = () => {
         console.log("Voice recognition started");
       };
       recognition.onend = () => {
-        setIsListening(false);
-        console.log("Voice recognition stopped");
+        if (isListening) {
+          recognition.start();
+          console.log("Restarting recognition");
+        } else {
+          setIsListening(false);
+          console.log("Voice recognition stopped");
+        }
       };
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
