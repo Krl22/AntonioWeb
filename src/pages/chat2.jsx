@@ -99,11 +99,15 @@ const ChatGPTClone = () => {
   };
 
   const startListening = () => {
-    recognitionRef.current?.start();
+    if (recognitionRef.current && !isListening) {
+      recognitionRef.current.start();
+    }
   };
 
   const stopListening = () => {
-    recognitionRef.current?.stop();
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
+    }
   };
 
   return (
