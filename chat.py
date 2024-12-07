@@ -5,6 +5,13 @@ import pyttsx3
 # Initialize the text-to-speech engine
 engine = pyttsx3.init()
 
+# List available voices and set a specific one
+voices = engine.getProperty('voices')
+for voice in voices:
+    print(f"Voice: {voice.name}, ID: {voice.id}")
+# Set a specific voice by ID (you can choose one from the printed list)
+engine.setProperty('voice', voices[0].id)  # Example: set to the first available voice
+
 # Set your OpenAI API key
 openai.api_key = 'your-openai-api-key'
 
