@@ -98,15 +98,13 @@ const ChatGPTClone = () => {
     link.click();
   };
 
-  const startListening = () => {
-    if (recognitionRef.current && !isListening) {
-      recognitionRef.current.start();
-    }
-  };
-
-  const stopListening = () => {
-    if (recognitionRef.current && isListening) {
-      recognitionRef.current.stop();
+  const toggleListening = () => {
+    if (recognitionRef.current) {
+      if (isListening) {
+        recognitionRef.current.stop();
+      } else {
+        recognitionRef.current.start();
+      }
     }
   };
 
@@ -139,7 +137,7 @@ const ChatGPTClone = () => {
             <FaDownload />
           </button>
           <button
-            onClick={isListening ? stopListening : startListening}
+            onClick={toggleListening}
             className="p-2 bg-gray-200 rounded-full dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
           >
             {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
