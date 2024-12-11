@@ -179,7 +179,7 @@ const Game = () => {
                 ballColors[index % ballColors.length]
               }`}
               style={{
-                left: `${(player.progress / MAX_QUESTIONS) * TRACK_LENGTH}px`,
+                left: `${(player.progress / MAX_QUESTIONS) * 100}%`,
                 top: `${index * 50}px`,
                 transition: "left 0.5s ease",
               }}
