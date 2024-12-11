@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db, auth } from "../firebaseconfig";
-import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, updateDoc, onSnapshot, runTransaction } from "firebase/firestore";
 import { questions } from "./utils/questions";
 
 const MAX_QUESTIONS = 10;
@@ -63,15 +63,23 @@ const Game = () => {
 
     if (isCorrect && roomData) {
       const user = auth.currentUser;
-      const updatedPlayers = roomData.players.map((player) =>
-        player.id === user.uid
-          ? { ...player, progress: player.progress + 1 }
-          : player
-      );
+      const roomRef = doc(db, "rooms", roomId);
 
       try {
-        await updateDoc(doc(db, "rooms", roomId), {
-          players: updatedPlayers,
+        await runTransaction(db, async (transaction) => {
+          const roomDoc = await transaction.get(roomRef);
+          if (!roomDoc.exists()) {
+            throw "Document does not exist!";
+          }
+
+          const roomData = roomDoc.data();
+          const updatedPlayers = roomData.players.map((player) =>
+            player.id === user.uid
+              ? { ...player, progress: player.progress + 1 }
+              : player
+          );
+
+          transaction.update(roomRef, { players: updatedPlayers });
         });
 
         if (currentQuestionIndex < questions.length - 1) {
