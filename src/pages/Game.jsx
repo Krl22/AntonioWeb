@@ -4,7 +4,7 @@ import { db, auth } from "../firebaseconfig";
 import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { questions } from "./utils/questions";
 
-const MAX_QUESTIONS = 1;
+const MAX_QUESTIONS = 10;
 const TRACK_LENGTH = 400;
 
 // Asignación de colores a cada jugador
