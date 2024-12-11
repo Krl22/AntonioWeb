@@ -1,19 +1,25 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { MdReplay } from "react-icons/md";
+import { MdReplay, MdVolumeUp } from "react-icons/md";
 import restaurantBg from "./assets/entrance.jpg";
 import waitress from "./assets/waitress.png";
-import entranceHelpAudio from "./assets/waitressAudio1.mp3";
+import entranceHelpAudio from "./assets/waitressWelcomeAudio.mp3";
 
 const EntranceScene = ({ changeScene }) => {
   const [audioEnded, setAudioEnded] = useState(false);
-  const [isExiting, setIsExiting] = useState(false); // Nuevo estado para la transición de salida
+  const [isExiting, setIsExiting] = useState(false); // Para transición de salida
+  const [restartKey, setRestartKey] = useState(0); // Clave para reiniciar el componente
   const audioRef = useRef(null);
+
+  const replayScene = () => {
+    setRestartKey((prevKey) => prevKey + 1); // Cambia la clave para forzar un reinicio
+    setAudioEnded(false); // Reinicia el estado de audio
+  };
 
   const replayAudio = () => {
     if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play();
+      audioRef.current.currentTime = 0; // Reinicia el audio
+      audioRef.current.play(); // Reproduce el audio
     }
   };
 
@@ -26,6 +32,7 @@ const EntranceScene = ({ changeScene }) => {
 
   return (
     <motion.div
+      key={restartKey} // Reinicia el componente cuando cambia la clave
       className="flex flex-col items-center justify-around w-full h-screen p-4 pt-10 pb-24"
       initial={{ opacity: 1 }}
       animate={isExiting ? { opacity: 0 } : { opacity: 1 }} // Transición de salida
@@ -68,24 +75,33 @@ const EntranceScene = ({ changeScene }) => {
             <p className="w-4/5 text-lg font-semibold text-gray-900 text-start">
               The waitress is approaching. What do you say?
             </p>
-            <button
-              onClick={replayAudio}
-              className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full shadow-lg hover:bg-blue-600"
-              aria-label="Replay Audio"
-            >
-              <MdReplay size={24} />
-            </button>
+            <div className="flex space-x-4">
+              <button
+                onClick={replayScene}
+                className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full shadow-lg hover:bg-blue-600"
+                aria-label="Replay Scene"
+              >
+                <MdReplay size={24} />
+              </button>
+              <button
+                onClick={replayAudio}
+                className="flex items-center justify-center w-10 h-10 text-white bg-green-500 rounded-full shadow-lg hover:bg-green-600"
+                aria-label="Replay Audio"
+              >
+                <MdVolumeUp size={24} />
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <button
-              onClick={() => handleSceneChange("Restaurant02")} // Usa la función con animación
+              onClick={() => handleSceneChange("table")}
               className="px-6 py-3 text-sm font-medium text-white transition duration-200 bg-blue-600 rounded-lg shadow sm:text-base hover:bg-blue-700"
             >
               "Table for two, please."
             </button>
             <button
-              onClick={() => handleSceneChange("Restaurant02")} // Usa la función con animación
+              onClick={() => handleSceneChange("Restaurant02")}
               className="px-6 py-3 text-sm font-medium text-white transition duration-200 bg-blue-600 rounded-lg shadow sm:text-base hover:bg-blue-700"
             >
               "What kind of food do you serve?"

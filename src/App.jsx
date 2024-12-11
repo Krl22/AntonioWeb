@@ -79,13 +79,14 @@ const ConditionalTopNavBar = () => {
     "/chat",
     "/avatar",
     "/game",
+    "/chatgptclone",
   ];
   return !hiddenRoutes.includes(location.pathname) ? <TopNavBar /> : null;
 };
 
 const ConditionalBottomNavBar = () => {
   const location = useLocation();
-  const hiddenRoutes = ["/", "/login", "/register", "/game"];
+  const hiddenRoutes = ["/", "/login", "/register", "/game", "/chatgptclone"];
   return !hiddenRoutes.includes(location.pathname) ? <BottomNavBar /> : null;
 };
 

@@ -33,6 +33,13 @@ const More = () => {
         Role Play
       </NavLink>
       <NavLink
+        to="/chatgptclone"
+        onClick={() => handleTitle("chatgptclone")}
+        className="w-full max-w-md p-4 my-2 text-center bg-white border rounded-md shadow-sm cursor-pointer hover:bg-blue-100 hover:shadow-md"
+      >
+        chatgptclone
+      </NavLink>
+      <NavLink
         to="/lobby"
         onClick={() => handleTitle("Online Game")}
         className="w-full max-w-md p-4 my-2 text-center bg-white border rounded-md shadow-sm cursor-pointer hover:bg-blue-100 hover:shadow-md"
